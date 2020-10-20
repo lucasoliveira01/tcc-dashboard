@@ -1,0 +1,55 @@
+﻿@page
+@model RequiresModel
+@{
+    ViewData["Title"] = "Solicitações";
+    List<FiscalizaDashboard.Models.Datum> requires = (List<FiscalizaDashboard.Models.Datum>)TempData["Requires"];
+}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <br />
+        <div class="row">
+            <div class="col-sm-12 col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Solicitações
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @foreach (var i in requires)
+                            {
+                                <a class="list-group-item list-group-item-action flex-column align-items-start" href="#">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">@i.type</h5>
+                                        <small style="color: @i.statusColor">@i.statusDescription</small>
+                                    </div>
+                                    <p class="mb-1">@i.description</p>
+                                    <p hidden="hidden" id="json">@Newtonsoft.Json.JsonConvert.SerializeObject(i)</p>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $('.list-group-item').on('click', function () {
+            var $this = $(this);
+            var $alias = $this.data('alias');
+
+            $('.active').removeClass('active');
+            $this.toggleClass('active')
+
+            // Pass clicked link element to another function
+            myfunction($this, $alias)
+        })
+
+        function myfunction($this, $alias) {            
+            console.log($this.text());  // Will log Paris | France | etc...
+
+            console.log($alias);
+        }
+    </script>
+}

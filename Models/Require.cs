@@ -7,6 +7,11 @@ namespace FiscalizaDashboard.Models
         public List<Datum> data { get; set; }
     }
 
+    public class SingleRequire
+    {
+        public Datum data { get; set; }
+    }
+
     public class Datum
     {
         public string description { get; set; }

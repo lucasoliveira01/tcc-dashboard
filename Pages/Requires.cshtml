@@ -17,7 +17,7 @@
                         <div class="list-group">
                             @foreach (var i in requires)
                             {
-                                <a class="list-group-item list-group-item-action flex-column align-items-start" href="#">
+                                <a data-alias=@i.id class="list-group-item list-group-item-action flex-column align-items-start" href="#">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5 class="mb-1">@i.type</h5>
                                         <small style="color: @i.statusColor">@i.statusDescription</small>
@@ -46,10 +46,8 @@
             myfunction($this, $alias)
         })
 
-        function myfunction($this, $alias) {            
-            console.log($this.text());  // Will log Paris | France | etc...
-
-            console.log($alias);
+        function myfunction($this, $alias) {
+            window.location = '/RequireDetails?id=' + $alias;
         }
     </script>
 }

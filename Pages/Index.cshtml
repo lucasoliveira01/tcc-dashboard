@@ -1,27 +1,19 @@
 ﻿@page
+@model FiscalizaDashboard.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Solicitações";
+    List<FiscalizaDashboard.Models.Datum> requires = (List<FiscalizaDashboard.Models.Datum>)TempData["Requires"];
 }
 
 <div class="container-fluid">
     <div class="animated fadeIn">
         <br />
-        <div class="row">
+        <div class="row" style="height: 200px">
             <div class="col-sm-6 col-lg-4">
                 <div class="card text-white bg-warning">
                     <div class="card-body pb-0">
-                        <div class="btn-group float-right">
-                            <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon-settings"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                        <div class="text-value">10</div>
-                        <div>Solicitações Em Aberto</div>
+                        <div style="font-size: 50px">@requires.Where(x => x.status == 1).Count()</div>
+                        <div style="font-size: 25px">Solicitações Em Aberto</div>
                     </div>
                     <div class="chart-wrapper mt-3" style="height:70px;">
                         <canvas class="chart" id="card-chart3" height="70"></canvas>
@@ -31,12 +23,9 @@
             <!-- /.col-->
             <div class="col-sm-6 col-lg-4">
                 <div class="card text-white bg-info">
-                    <div class="card-body pb-0">
-                        <button class="btn btn-transparent p-0 float-right" type="button">
-                            <i class="icon-location-pin"></i>
-                        </button>
-                        <div class="text-value">24</div>
-                        <div>Solicitações Em Andamento</div>
+                    <div class="card-body pb-0">    
+                        <div style="font-size: 50px">@requires.Where(x => x.status == 2).Count()</div>
+                        <div style="font-size: 25px">Solicitações Em Andamento</div>
                     </div>
                     <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
                         <canvas class="chart" id="card-chart2" height="70"></canvas>
@@ -46,19 +35,9 @@
             <!-- /.col-->
             <div class="col-sm-6 col-lg-4">
                 <div class="card text-white bg-primary">
-                    <div class="card-body pb-0">
-                        <div class="btn-group float-right">
-                            <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon-settings"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                        <div class="text-value">129</div>
-                        <div>Solicitações Finalizadas</div>
+                    <div class="card-body pb-0">                        
+                        <div style="font-size: 50px">@requires.Where(x => x.status == 3).Count()</div>
+                        <div style="font-size: 25px">Solicitações Finalizadas</div>
                     </div>
                     <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
                         <canvas class="chart" id="card-chart1" height="70"></canvas>
@@ -66,60 +45,44 @@
                 </div>
             </div>
             <!-- /.col-->
-
             @*<div class="col-sm-6 col-lg-3">
-                <div class="card text-white bg-danger">
-                    <div class="card-body pb-0">
-                        <div class="btn-group float-right">
-                            <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon-settings"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="card text-white bg-danger">
+                        <div class="card-body pb-0">
+                            <div class="btn-group float-right">
+                                <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="icon-settings"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
                             </div>
+                            <div class="text-value">13</div>
+                            <div>Solicitações Vencidas</div>
                         </div>
-                        <div class="text-value">13</div>
-                        <div>Solicitações Vencidas</div>
+                        <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+                            <canvas class="chart" id="card-chart4" height="70"></canvas>
+                        </div>
                     </div>
-                    <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
-                        <canvas class="chart" id="card-chart4" height="70"></canvas>
-                    </div>
-                </div>
-            </div>*@
+                </div>*@
             <!-- /.col-->
         </div>
         <!-- /.row-->
-        <div class="card">
+        <div class="card" style="margin-top:40px;">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h4 class="card-title mb-0">Solicitações</h4>
-                        <div class="small text-muted">Novembro 2020</div>
+                        <h4 class="card-title mb-0">Solicitações Recebidas - Últimos 6 Meses</h4>
                     </div>
                     <!-- /.col-->
                     <div class="col-sm-7 d-none d-md-block">
-                        <button class="btn btn-primary float-right" type="button">
-                            <i class="icon-cloud-download"></i>
-                        </button>
-                        <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
-                            <label class="btn btn-outline-secondary">
-                                <input id="option1" type="radio" name="options" autocomplete="off"> Dia
-                            </label>
-                            <label class="btn btn-outline-secondary active">
-                                <input id="option2" type="radio" name="options" autocomplete="off" checked=""> Mês
-                            </label>
-                            <label class="btn btn-outline-secondary">
-                                <input id="option3" type="radio" name="options" autocomplete="off"> Ano
-                            </label>
-                        </div>
                     </div>
                     <!-- /.col-->
                 </div>
                 <!-- /.row-->
-                <div class="chart-wrapper" style="height:300px;margin-top:40px;">
-                    <canvas class="chart" id="main-chart" height="300"></canvas>
+                <div class="chart-wrapper" style="margin-top:30px;">
+                    <canvas class="chart" id="myChart" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -133,4 +96,45 @@
     <script src="~/lib/chart.js/dist/Chart.min.js"></script>
     <script src="~/lib/coreui/js/custom-tooltips.min.js"></script>
     <script src="~/lib/coreui/js/main.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro'],
+                datasets: [{
+                    label: 'Solicitações Mensais',
+                    data: [12, 19, 3, 5, 2, @requires.Count],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+
 }

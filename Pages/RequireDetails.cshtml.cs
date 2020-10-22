@@ -39,6 +39,8 @@ namespace FiscalizaDashboard.Pages
 
                 Datum require = resultado.data;
                 require.type = GetType(require.type);
+                if (require.latitude != null)
+                    require.maps = $"https://maps.google.com/maps?q={require.latitude}%2C{require.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed";
 
                 TempData["Requires"] = require;
             }
@@ -47,15 +49,67 @@ namespace FiscalizaDashboard.Pages
         [BindProperty]
         public Datum Input { get; set; }
 
-        public IActionResult OnPost()
+        public class FormModel
+        {
+            public string select1 { get; set; }
+        }
+
+        public IActionResult OnPost(FormModel model, [FromServices] IConfiguration config)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var a = Status;
-            return RedirectToPage("/Index");
+            var key = GetKey(config);
+
+            var data = GetData(config, model);
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string baseURL =
+                    config.GetSection("FirebaseAPI:BaseURL").Value;
+                string url = baseURL + "/request/" + key;
+
+                HttpResponseMessage response = client.PutAsJsonAsync(url, data).Result;
+
+                response.EnsureSuccessStatusCode();
+                string conteudo =
+                    response.Content.ReadAsStringAsync().Result;
+            }
+
+            return RedirectToPage("/Requires");
+        }
+
+        private RequestPut GetData(IConfiguration config, FormModel model)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string baseURL =
+                    config.GetSection("FirebaseAPI:BaseURL").Value;
+                string url = baseURL + "/request/1/" + Input.id;
+
+                HttpResponseMessage response = client.GetAsync(url).Result;
+
+                response.EnsureSuccessStatusCode();
+                string conteudo =
+                    response.Content.ReadAsStringAsync().Result;
+
+                SingleRequirePut resultado = JsonConvert.DeserializeObject<SingleRequirePut>(conteudo);
+
+                RequestPut require = resultado.data;
+                require.status = int.Parse(model.select1);
+
+                return require;
+            }
         }
 
         private string GetType(string type)
@@ -82,6 +136,32 @@ namespace FiscalizaDashboard.Pages
 
                 default:
                     return "";
+            }
+        }
+
+        private string GetKey(IConfiguration config)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string baseURL =
+                    config.GetSection("FirebaseAPI:BaseURL").Value;
+                string url = baseURL + "/getRequest/" + Input.id;
+
+                HttpResponseMessage response = client.GetAsync(url).Result;
+
+                response.EnsureSuccessStatusCode();
+                string conteudo =
+                    response.Content.ReadAsStringAsync().Result;
+
+                var definition = new { key = "" };
+
+                var customer1 = JsonConvert.DeserializeAnonymousType(conteudo, definition);
+
+                return customer1.key;
             }
         }
 

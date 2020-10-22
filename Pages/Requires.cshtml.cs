@@ -45,12 +45,13 @@ namespace CoreUI_Free_Bootstrap_Admin.Pages
                         image = a.image,
                         statusDescription = GetStatus(a.status),
                         statusColor = GetStatusColor(a.status),
+                        status = a.status,
                         type = GetType(a.type),
                         user = a.user,
                     });
                 }
 
-                TempData["Requires"] = requires;
+                TempData["Requires"] = requires.OrderBy(x => x.status).ToList();
             }
         }
 

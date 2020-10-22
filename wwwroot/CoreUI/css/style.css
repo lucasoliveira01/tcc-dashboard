@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*!
  * CoreUI - Open Source Dashboard UI Kit
  * @version v2.0.21
@@ -14073,6 +14073,10 @@ body {
   font-weight: 600;
 }
 
+.text-value-xl {
+    font-size: 1.60rem;
+    font-weight: 600;
+}
 .text-white .text-muted {
   color: rgba(255, 255, 255, 0.6) !important;
 }
